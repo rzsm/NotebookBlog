@@ -1,52 +1,24 @@
 import React, { Component } from "react";
 import Comment from "./Comment";
+import postsData from "../db";
 
-export default class Comments extends Component {
-  constructor(props) {
-    super(props);
+export default function Comments(props) {
+  const [comments, setComments] = React.useState(postsData.comments);
 
-    this.state = {
-      postComments: null,
-    };
-  }
-
-  async getComments(postId) {
-    const comments = await fetch(
-      `http://localhost:3000/comments?post-id=${postId}`
-    );
-
-    return await comments.json();
-  }
-
-  componentDidMount() {
-    this.getComments(1).then((data) => this.setState({ postComments: data }));
-  }
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.posts) {
-      if (
-        prevProps.posts[prevProps.activePostIndex] !==
-        this.props.posts[this.props.activePostIndex]
-      ) {
-        this.getComments(this.props.posts[this.props.activePostIndex].id).then(
-          (data) => this.setState({ postComments: data })
-        );
-      }
+  const postComments = comments.filter((comment) => {
+    if (comment["post-id"] === props.activePostIndex + 1) {
+      return comment;
     }
-  }
+  });
 
-  render() {
-    if (this.state.postComments) {
-      let commentELs = this.state.postComments.map((comment) => (
-        <Comment data={comment} />
-      ));
-      return (
-        <div className="comments">
-          <p>Comments:</p>
-          {commentELs}
-        </div>
-      );
-    }
-    return <></>;
-  }
+  const commentElements = postComments.map((postComment) => (
+    <Comment data={postComment} key={postComment.id} />
+  ));
+
+  return (
+    <>
+      {commentElements.length && <h4 className="comment-title">Comments: </h4>}
+      {commentElements}
+    </>
+  );
 }

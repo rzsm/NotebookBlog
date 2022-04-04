@@ -31,12 +31,19 @@ li {
 }
 
 .comments {
-    color: #007bec;
+    color: #081623;
     margin: 20px;
 }
 
-.comment {
-    margin: 5px;
+.comment, .comment-title {
+    margin: 10px;
+    color: #007bec;
+}
+
+.comment-title {
+    border-bottom: 1px solid #007bec;
+    width: 80px;   
+    padding-bottom: 3px; 
 }
 
 img {
